@@ -4,7 +4,7 @@
 
 using namespace std; 
 
-
+// Nowy komentarz
 void wczytaj_macierz()
 {
 int count = 0;
