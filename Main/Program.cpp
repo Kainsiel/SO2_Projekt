@@ -4,46 +4,18 @@
 
 using namespace std; 
 
-// Nowy komentarz
+//zwraca macierz zczytana z pliku
 void wczytaj_macierz()
 {
-int count = 0;
-FILE *plik;
 
-fPointer = fopen("tekst.txt", "r");
-
-fclose(plik);
-
- /* int i;
-  int j;
-
-macierz
-int** mat=malloc(4*sizeof(int));
-for(i=0;i<4;++i)
-mat[i]=malloc(4*sizeof(int));
-
-
-  FILE *plik;
-  plik=fopen("tekst.txt", "r");
-
- for(i = 0; i < 1000; i++)
-  {
-      for(j = 0; j < 4; j++) 
-      {
-       if (!fscanf(plik, " %c", &mat[i][j])) 
-           break;
-       mat[i][j] -= '0';
-       printf("\n",mat[i][j]);
-      }
-
-  }
-  fclose(plik);*/
 }
-
+//tworzy macierz z wylosowanymi wartosciami
 void losuj_macierz()
 {
   
 }
+
+//transparuj macierz
 
 int main()
 {
