@@ -2,6 +2,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <fstream>
+#include <time.h>
 
 using namespace std; 
 
@@ -58,9 +59,29 @@ int** wczytaj_macierz()
 }
 
 //tworzy macierz z wylosowanymi wartosciami
-void losuj_macierz()
+int** losuj_macierz()
 {
+  int** macierz;
+  int rozmiar = wczytaj_rozmiar();
+
+  macierz = new int*[rozmiar];
+  for(int i = 0; i < rozmiar; i++)
+    macierz[i] = new int[rozmiar];
+
+  for(int i = 0; i < rozmiar; i++){
+  for (int j= 0; j < rozmiar; j++){
+    macierz[i][j] = rand() % 100; 
+  }	
+  }	
+
+  for(int i = 0; i < rozmiar; i++){
+	for (int j= 0; j < rozmiar; j++){
+	 cout << macierz[i][j] << " "; 	
+	}
+	 cout << "\n";
+	}
   
+  return macierz;
 }
 
 //transparuj macierz
@@ -69,6 +90,8 @@ void transparu_macierz(){
 
 int main(int argc, char *argv[])
 {
-  wczytaj_macierz();
+  srand(time(NULL));
+
+ losuj_macierz();
   return 0;
 }
