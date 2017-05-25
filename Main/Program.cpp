@@ -91,6 +91,16 @@ void transparu_macierz(){
 int main(int argc, char *argv[])
 {
   srand(time(NULL));
+ int **A,**B,**C,m;
+ 
+ m = wczytaj rozmiar();
+ A = wczytaj_macierz();
+ B = losuj macierz();
+
+ for(i = 0; i < m; i++)
+  {
+    C[i] = new int[p];
+  }
 
  losuj_macierz();
   return 0;
