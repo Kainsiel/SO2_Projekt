@@ -93,14 +93,33 @@ int main(int argc, char *argv[])
   srand(time(NULL));
  int **A,**B,**C,m;
  
- m = wczytaj rozmiar();
+ m = wczytaj_rozmiar();
  A = wczytaj_macierz();
- B = losuj macierz();
+ B = losuj_macierz();
+ 
+ int i,j,k,s;
 
  for(i = 0; i < m; i++)
   {
-    C[i] = new int[p];
+    C[i] = new int[m];
   }
+
+for(i = 0; i < m; i++)
+    for(j = 0; j < m; j++)
+    {
+      s = 0;
+      for(k = 0; k < m; k++) s += A[i][k] * B[k][j];
+      C[i][j] = s;
+    }
+
+
+  for(i = 0; i < m; i++)
+  {
+    for(j = 0; j < m; j++) cout << " " << C[i][j];
+    cout << endl;
+  }
+
+
 
  losuj_macierz();
   return 0;
