@@ -134,5 +134,17 @@ int main(int argc, char *argv[])
     cout << endl;
   }
 
+  
+  for(i = 0; i < m; i++)
+  {
+    delete [] A[i];
+    delete [] B[i];
+    delete [] C[i];
+  }
+
+  delete [] A;
+  delete [] B;
+  delete [] C; 
+
   return 0;
 }
