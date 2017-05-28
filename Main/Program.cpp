@@ -17,7 +17,7 @@ int wczytaj_rozmiar()
 	}
 
 	plik >> rozmiar;
-	
+
 	plik.close();
 	return rozmiar;
 }
@@ -42,15 +42,15 @@ int** wczytaj_macierz()
 		macierz[i] = new int[rozmiar];
 
 	for(int i = 0; i < rozmiar; i++){
-	for (int j= 0; j < rozmiar; j++){
-	 plik >> macierz[i][j]; 
-	}	
+		for (int j= 0; j < rozmiar; j++){
+		 plik >> macierz[i][j]; 
+		}	
 	}
 	
 	for(int i = 0; i < rozmiar; i++){
-	for (int j= 0; j < rozmiar; j++){
-	 cout << macierz[i][j] << " "; 	
-	}
+		for (int j= 0; j < rozmiar; j++){
+		 cout << macierz[i][j] << " "; 	
+		}
 	 cout << "\n";
 	}
 
@@ -73,14 +73,15 @@ int** losuj_macierz()
     macierz[i][j] = rand() % 100; 
   }	
   }	
-
+  
+  cout << "\n";
   for(int i = 0; i < rozmiar; i++){
 	for (int j= 0; j < rozmiar; j++){
 	 cout << macierz[i][j] << " "; 	
 	}
 	 cout << "\n";
 	}
-  
+  cout << "\n";
   return macierz;
 }
 
@@ -92,17 +93,25 @@ int main(int argc, char *argv[])
 {
   srand(time(NULL));
  int **A,**B,**C,m;
- 
- m = wczytaj_rozmiar();
+ int i,j,k,s;
+
+  m = wczytaj_rozmiar();
+ cout << "\n" << m << "\n";
+
+ C = new int * [m];
+ for(i = 0; i < 3; i++)
+  {
+    
+    C[i] = new int[m];
+  }
+
+
  A = wczytaj_macierz();
  B = losuj_macierz();
  
- int i,j,k,s;
 
- for(i = 0; i < m; i++)
-  {
-    C[i] = new int[m];
-  }
+
+
 
 for(i = 0; i < m; i++)
     for(j = 0; j < m; j++)
@@ -119,8 +128,5 @@ for(i = 0; i < m; i++)
     cout << endl;
   }
 
-
-
- losuj_macierz();
   return 0;
 }
