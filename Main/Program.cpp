@@ -85,8 +85,28 @@ int** losuj_macierz()
   return macierz;
 }
 
+int** pomnoz_macierz(int **A,int **B,int **C,int m){
+
+	C = new int * [m];
+	for(int i = 0; i < 3; i++)
+	{
+
+	C[i] = new int[m];
+	}
+
+	int s;
+	for(int i = 0; i < m; i++)
+	    for(int j = 0; j < m; j++)
+	    {
+	      s = 0;
+	      for(int k = 0; k < m; k++) s += A[i][k] * B[k][j];
+	      C[i][j] = s;
+	    }
+	return C;
+	}
+
 //transparuj macierz
-void transparu_macierz(){
+void transparuj_macierz(){
 }
 
 int main(int argc, char *argv[])
@@ -98,28 +118,14 @@ int main(int argc, char *argv[])
   m = wczytaj_rozmiar();
  cout << "\n" << m << "\n";
 
- C = new int * [m];
- for(i = 0; i < 3; i++)
-  {
-    
-    C[i] = new int[m];
-  }
+
 
 
  A = wczytaj_macierz();
  B = losuj_macierz();
- 
+ C = pomnoz_macierz(A,B,C,m);
 
 
-
-
-for(i = 0; i < m; i++)
-    for(j = 0; j < m; j++)
-    {
-      s = 0;
-      for(k = 0; k < m; k++) s += A[i][k] * B[k][j];
-      C[i][j] = s;
-    }
 
 
   for(i = 0; i < m; i++)
