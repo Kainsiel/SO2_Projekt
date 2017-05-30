@@ -1,31 +1,22 @@
 #include <thread>
+#include <mutex>
 #include <iostream>
 #include <stdlib.h>
 #include <fstream>
 #include <time.h>
+#include <vector>
 
 using namespace std; 
 
-int wczytaj_rozmiar()
-{
-	int rozmiar;
-	
-	ifstream plik;
-	plik.open("tekst.txt", fstream::in);
-	if (!plik.is_open()){
-	  throw "Brak pliku z danymi";
-	}
+int const m = 2;
+mutex mtx[m][m];
+thread watek[m];
 
-	plik >> rozmiar;
-
-	plik.close();
-	return rozmiar;
-}
 
 //zwraca macierz zczytana z pliku
 int** wczytaj_macierz()
 {
-	int rozmiar;
+	int rozmiar = m;
 	int** macierz;
 	
 	
@@ -35,7 +26,6 @@ int** wczytaj_macierz()
 	if (!plik.is_open()){
 	  throw "Brak pliku z danymi";
 	}
-	plik >> rozmiar;
 	
 	macierz = new int*[rozmiar];
 	for(int i = 0; i < rozmiar; i++)
@@ -62,7 +52,7 @@ int** wczytaj_macierz()
 int** losuj_macierz()
 {
   int** macierz;
-  int rozmiar = wczytaj_rozmiar();
+  int rozmiar = m;
 
   macierz = new int*[rozmiar];
   for(int i = 0; i < rozmiar; i++)
@@ -85,25 +75,11 @@ int** losuj_macierz()
   return macierz;
 }
 
-int** pomnoz_macierz(int **A,int **B,int **C,int m){
-
-	C = new int * [m];
-	for(int i = 0; i < 3; i++)
-	{
-
-	C[i] = new int[m];
-	}
-
-	int s;
-	for(int i = 0; i < m; i++)
-	    for(int j = 0; j < m; j++)
-	    {
-	      s = 0;
-	      for(int k = 0; k < m; k++) s += A[i][k] * B[k][j];
-	      C[i][j] = s;
-	    }
-	return C;
-	}
+void pomnoz_macierz(int const * const * A, int const * const * B,int** C,int row,int col, int i){
+    mtx[row][col].lock();
+    C[row][col] += A[row][i]*B[i][col];
+    mtx[row][col].unlock();
+}
 
 //transparuj macierz
 void transparuj_macierz(){
@@ -112,20 +88,36 @@ void transparuj_macierz(){
 int main(int argc, char *argv[])
 {
   srand(time(NULL));
- int **A,**B,**C,m;
+ int **A,**B,**C;
  int i,j,k,s;
-
-  m = wczytaj_rozmiar();
- cout << "\n" << m << "\n";
 
 
 
 
  A = wczytaj_macierz();
  B = losuj_macierz();
- C = pomnoz_macierz(A,B,C,m);
 
 
+
+ C = new int * [m];
+ for(int i = 0; i < m; i++)
+ {
+	C[i] = new int[m];
+ }
+
+
+ for(int row=0; row<m; row++){
+        for(int col=0; col<m;col++){
+            for(int i=0;i<m;i++){
+                watek[i] = thread(pomnoz_macierz, A, B, C,row, col, i);
+            }
+        }
+    }
+
+
+      for(int i=0;i<2;i++){
+         watek[i].join();
+      }
 
 
   for(i = 0; i < m; i++)
