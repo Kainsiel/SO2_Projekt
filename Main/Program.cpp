@@ -46,11 +46,13 @@ void Przetwarzacz()
   int var1 , var2;
   lock_guard<mutex> lock(mx);
   var1 = kolejka1.back();
-  printw(" %d ", var1);
+  //printw(" %d ", var1);
   kolejka1.pop_back();
   var2 = kolejka2.back();
-  printw(" %d \n", var2);
+  //printw(" %d \n", var2);
   kolejka2.pop_back();
+
+  A[var1][var2]=1;
 
   int temp = A[M-1][N-1];
   for (int i=M*N-1; i>0; i--){
@@ -72,7 +74,7 @@ void Wyswietl()
 	}
      printw("\n");
 }
-   
+   printw("\n");
   
    
   
@@ -84,9 +86,9 @@ int main()
 {
   srand(time(NULL));
   initscr();
-  vector<thread> threads;
-  vector<thread> threadp;
-  vector<thread> threadw;
+  vector<thread> thread_producent;
+  vector<thread> thread_przetwarzacz;
+  vector<thread> thread_wyswietl;
 
  A = new int * [M];
  for(int i = 0; i < M; i++)
@@ -102,34 +104,34 @@ int main()
 
 
 printw("\n");
-  for (int i = 0; i < 10; i++){
-    threads.push_back(thread(Producent));
+for (int i = 0; i < 10; i++){
+  thread_producent.push_back(thread(Producent));
     
 
 }
 
-  for (int i = 0; i < 10; i++){
-    threadp.push_back(thread(Przetwarzacz));
+for (int i = 0; i < 10; i++){
+  thread_przetwarzacz.push_back(thread(Przetwarzacz));
     
 
 }
 
-  for (int i = 0; i < 10; i++){
-    threadw.push_back(thread(Wyswietl));
+for (int i = 0; i < 10; i++){
+  thread_wyswietl.push_back(thread(Wyswietl));
     
 }
 
-for(auto& thread : threadw)
+for(auto& thread : thread_wyswietl)
   thread.join();
 
-for(auto& thread : threadp)
+for(auto& thread : thread_przetwarzacz)
   thread.join();
 
-for(auto& thread : threads)
+for(auto& thread : thread_producent)
   thread.join();	
 
- getch();
+getch();
   
-  endwin();
-  return 0;
+endwin();
+return 0;
 }
