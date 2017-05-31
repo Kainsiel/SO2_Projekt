@@ -1,2 +1,2 @@
 # SO2_Projekt
-test
+g++ -std=c++11 -pthread Program.cpp -o a.out -lncurses
