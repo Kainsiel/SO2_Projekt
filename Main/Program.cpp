@@ -6,16 +6,18 @@
 #include <vector>
 #include <ncurses.h>
 #include <chrono>
-#include <condition_variable>
+#include <queue>
 
 using namespace std;
 
 int **A;
 int const M = 5;
 int const N = 5;
-vector<int> kolejka1;
-mutex mx;
-vector<int> kolejka2;
+queue <int> kolejka1;
+mutex mx1;
+
+queue <int> kolejka2;
+mutex mx2;
 int spr = 0;
 condition_variable cv;
 
@@ -32,24 +34,21 @@ int getX(int size, int pos){
 
 void Producent(){
 
-unique_lock<mutex> lock(mx);
-
 kolejka1.push_back(rand() % M);
 kolejka2.push_back(rand() % N);
 
-cv.wait(lock,[]{return spr == 1;});
+
 
 }
 
 void Przetwarzacz()
 {
   int var1 , var2;
-  lock_guard<mutex> lock(mx);
   var1 = kolejka1.back();
-  //printw(" %d ", var1);
+  printw(" %d ", var1);
   kolejka1.pop_back();
   var2 = kolejka2.back();
-  //printw(" %d \n", var2);
+  printw(" %d \n", var2);
   kolejka2.pop_back();
 
   A[var1][var2]=1;
@@ -60,27 +59,23 @@ void Przetwarzacz()
   }
   A[0][0] = temp;
 
-
-   spr=1;
-  cv.notify_one();
+  
 }
 
-void Wyswietl()
-{
+void Wyswietl(){
 
-   for(int i = 0; i < M; i++){
+this_thread::sleep_for(chrono::seconds(1));
+
+
+for(int i = 0; i < M; i++){
 	for (int j= 0; j < N; j++){
 	  printw(" %d ", A[i][j]);
 	}
      printw("\n");
 }
    printw("\n");
-  
-   
-  
+   refresh();
 }
-
-//transparuj macierz
 
 int main()
 {
@@ -103,32 +98,19 @@ int main()
 }
 
 
-printw("\n");
-for (int i = 0; i < 10; i++){
-  thread_producent.push_back(thread(Producent));
-    
 
-}
+  auto tProducent = thread(Producent);
 
-for (int i = 0; i < 10; i++){
-  thread_przetwarzacz.push_back(thread(Przetwarzacz));
-    
+  auto tPrzetwarzacz = thread(Przetwarzacz);
 
-}
+  auto tWyswietl = thread(Wyswietl);
 
-for (int i = 0; i < 10; i++){
-  thread_wyswietl.push_back(thread(Wyswietl));
-    
-}
 
-for(auto& thread : thread_wyswietl)
-  thread.join();
+  tProducent.join();
 
-for(auto& thread : thread_przetwarzacz)
-  thread.join();
+  tPrzetwarzacz.join();
 
-for(auto& thread : thread_producent)
-  thread.join();	
+  tWyswietl.join();
 
 getch();
   
