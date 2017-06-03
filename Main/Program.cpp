@@ -18,7 +18,6 @@ mutex mx1;
 
 queue <int> kolejka2;
 mutex mx2;
-mutex mx3;
 
 int A[M][N];
 mutex mtx;
@@ -33,21 +32,6 @@ int getY(int size, int pos){
 int getX(int size, int pos){
 	int rows = pos/size;
 	return pos-rows*size;
-}
-
-void Wyczysc_macierz(){
-
- while(1){
-   mtx.lock();
-   for(int i=0; i<M; i++){
-	 for(int j = 0; j<N; j++){
-	   A[i][j] = 0;
-	   }    		
-   }
-   mtx.unlock();
- }
- 
- this_thread::sleep_for(std::chrono::seconds(30));
 }
 
 void Producent(){
@@ -67,6 +51,7 @@ while(1){
 
 void Przetwarzacz()
 {
+  while(1){
   int var1 , var2;
   mx1.lock();
   if(int spr = kolejka1.back())
@@ -77,17 +62,18 @@ void Przetwarzacz()
   if(int spr = kolejka2.back())
     var2 = kolejka2.back();
   mx2.unlock();
-
+  mtx.lock();
   A[var1][var2]=1;
 
-/*  int temp = A[M-1][N-1];
+  int temp = A[M-1][N-1];
   for (int i=M*N-1; i>0; i--){
   A[getY(M, i)][getX(N, i)] = A[getY(M, i-1)][getX(N, i-1)];
   }
   A[0][0] = temp;
   
-*/
-  
+mtx.unlock();
+this_thread::sleep_for (chrono::milliseconds(200)); 
+} 
 }
 
 void Wyswietl(){
@@ -117,7 +103,7 @@ int main()
   
   initscr();
 
-auto tWyczysc = thread(Wyczysc_macierz);
+
   
 auto tWyswietl = thread(Wyswietl);
 
@@ -126,7 +112,7 @@ auto tProducent = thread(Producent);
 auto tPrzetwarzacz = thread(Przetwarzacz);
 
 
-tWyczysc.join();
+
 
 tWyswietl.join();
 
