@@ -77,9 +77,9 @@ void Przetwarzacz()
   if(int spr = kolejka2.back())
     var2 = kolejka2.back();
   mx2.unlock();
-  mx3.lock();
+
   A[var1][var2]=1;
-  mx3.unlock();
+
 /*  int temp = A[M-1][N-1];
   for (int i=M*N-1; i>0; i--){
   A[getY(M, i)][getX(N, i)] = A[getY(M, i-1)][getX(N, i-1)];
@@ -94,6 +94,8 @@ void Wyswietl(){
 
 this_thread::sleep_for(chrono::milliseconds(500));
 
+while(1){
+clear();
 mtx.lock();
 for(int i = 0; i < M; i++){
 	for (int j= 0; j < N; j++){
@@ -102,8 +104,12 @@ for(int i = 0; i < M; i++){
      printw("\n");
 }
 printw("\n");
+
 mtx.unlock();
-   refresh();
+refresh();
+this_thread::sleep_for(chrono::milliseconds(500)); 
+}
+
 }
 
 int main()
@@ -117,7 +123,7 @@ auto tWyswietl = thread(Wyswietl);
 
 auto tProducent = thread(Producent);
 
-//auto tPrzetwarzacz = thread(Przetwarzacz);
+auto tPrzetwarzacz = thread(Przetwarzacz);
 
 
 tWyczysc.join();
@@ -126,7 +132,7 @@ tWyswietl.join();
 
 tProducent.join();
 
-//tPrzetwarzacz.join();
+tPrzetwarzacz.join();
 
 
 
